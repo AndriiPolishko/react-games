@@ -1,0 +1,6 @@
+.Board {
+    display: grid;
+    grid-template-rows: repeat(20, 30px);
+    grid-template-columns: repeat(12, 30px);
+    grid-gap: 2px;
+}

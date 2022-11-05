@@ -1,5 +1,11 @@
+import { Tetris } from '@/components';
+
 const App = () => {
-  return <div className="App">hello</div>;
+  return (
+    <div className="App">
+      <Tetris />
+    </div>
+  );
 };
 
 export default App;
