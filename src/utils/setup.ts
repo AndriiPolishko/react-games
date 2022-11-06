@@ -6,27 +6,22 @@ export const HEIGHT = 20;
 export const tetromino: ITetromino = {
   0: { shape: [[0]], color: '0, 0, 0' },
   I: {
-    shape: [
-      [0, 'I', 0, 0],
-      [0, 'I', 0, 0],
-      [0, 'I', 0, 0],
-      [0, 'I', 0, 0],
-    ],
+    shape: [['I'], ['I'], ['I'], ['I']],
     color: 'red',
   },
   J: {
     shape: [
-      [0, 'J', 0],
-      [0, 'J', 0],
-      ['J', 'J', 0],
+      [0, 'J'],
+      [0, 'J'],
+      ['J', 'J'],
     ],
     color: 'blue',
   },
   L: {
     shape: [
-      [0, 'L', 0],
-      [0, 'L', 0],
-      [0, 'L', 'L'],
+      ['L', 0],
+      ['L', 0],
+      ['L', 'L'],
     ],
     color: 'yellow',
   },
@@ -41,13 +36,11 @@ export const tetromino: ITetromino = {
     shape: [
       [0, 'S', 'S'],
       ['S', 'S', 0],
-      [0, 0, 0],
     ],
     color: 'green',
   },
   T: {
     shape: [
-      [0, 0, 0],
       ['T', 'T', 'T'],
       [0, 'T', 0],
     ],
@@ -57,7 +50,6 @@ export const tetromino: ITetromino = {
     shape: [
       ['Z', 'Z', 0],
       [0, 'Z', 'Z'],
-      [0, 0, 0],
     ],
     color: 'lightgreen',
   },
