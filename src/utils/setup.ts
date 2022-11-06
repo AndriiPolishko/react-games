@@ -1,4 +1,4 @@
-import { KeyChar, ITetromino } from '@/types';
+import { KeyChar, ITetromino, IPlayer } from '@/types';
 
 export const WIDTH = 12;
 export const HEIGHT = 20;
@@ -66,3 +66,24 @@ export const buildBoard = () =>
   Array.from({ length: HEIGHT }, () =>
     Array.from({ length: WIDTH }, (): [KeyChar, string] => [0, 'clear'])
   );
+
+export const isColliding = (
+  player: IPlayer,
+  board: [KeyChar, string][][],
+  { x: moveX, y: moveY }: { x: number; y: number }
+) => {
+  for (let y = 0; y < player.tetromino.length; y += 1) {
+    for (let x = 0; x < player.tetromino[y].length; x += 1) {
+      if (player.tetromino[y][x] !== 0) {
+        if (
+          !board[y + player.pos.y + moveY] ||
+          board[y + player.pos.y + moveY][x + player.pos.x + moveX][1] !== 'clear'
+        ) {
+          return true;
+        }
+      }
+    }
+  }
+
+  return false;
+};

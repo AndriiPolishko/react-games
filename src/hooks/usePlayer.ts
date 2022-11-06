@@ -5,7 +5,7 @@ import { randomTetrominoes, WIDTH } from '@/utils';
 export const usePlayer = () => {
   const [player, setPlayer] = useState<IPlayer>({
     collided: false,
-    pos: { x: 0, y: 0 },
+    pos: { x: WIDTH / 2 - 2, y: 0 },
     tetromino: randomTetrominoes().shape,
   });
 

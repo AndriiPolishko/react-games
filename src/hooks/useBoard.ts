@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { buildBoard } from '@/utils';
 import { IPlayer, KeyChar } from '@/types';
 
-export const useBoard = (player: IPlayer) => {
+export const useBoard = (player: IPlayer, resetPlayer: () => void) => {
   const [board, setBoard] = useState(buildBoard());
 
   useEffect(() => {
@@ -21,11 +21,15 @@ export const useBoard = (player: IPlayer) => {
           }
         });
       });
+
+      if (player.collided) {
+        resetPlayer();
+      }
       return newStage;
     };
 
     setBoard((prevState) => updateBoard(prevState));
-  }, [player]);
+  }, [player, resetPlayer]);
 
   return [board, setBoard] as const;
 };

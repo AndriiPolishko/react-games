@@ -1,32 +1,40 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Board } from '@/components';
-import { useBoard, usePlayer } from '@/hooks';
-import { HEIGHT, WIDTH } from '@/utils';
+import { useBoard, useInterval, usePlayer } from '@/hooks';
+import { isColliding } from '@/utils';
+import './tetris.css';
 
 export const Tetris = () => {
-  const [dropTime, setDropTime] = useState(1000);
+  const [dropTime, setDropTime] = useState(500);
   const [player, updatePlayerPos, resetPlayer] = usePlayer();
-  const [board, setBoard] = useBoard(player);
+  const [board, setBoard] = useBoard(player, resetPlayer);
 
-  useEffect(() => {
-    const movePlayer = (dir: number) => {
-      if (player.pos.x + dir >= 0 && player.pos.x + player.tetromino[0].length + dir <= WIDTH)
+  const movePlayer = useCallback(
+    (dir: number) => {
+      if (!isColliding(player, board, { x: dir, y: 0 }))
         updatePlayerPos({ x: dir, y: 0, collided: false });
-    };
-
-    const drop = () => {
-      if (player.pos.y < HEIGHT - player.tetromino.length) {
-        updatePlayerPos({ x: 0, y: 1, collided: false });
-      } else {
-        console.log('fuck');
+      else {
+        updatePlayerPos({ x: 0, y: 0, collided: true });
       }
-    };
+    },
+    [board, player, updatePlayerPos]
+  );
 
-    const dropPlayer = () => {
-      drop();
-    };
+  const drop = useCallback(() => {
+    if (!isColliding(player, board, { x: 0, y: 1 })) {
+      updatePlayerPos({ x: 0, y: 1, collided: false });
+    } else {
+      updatePlayerPos({ x: 0, y: 0, collided: true });
+    }
+  }, [board, player, updatePlayerPos]);
 
-    const move = ({ keyCode, repeat }: { keyCode: number; repeat: boolean }): void => {
+  const dropPlayer = useCallback(() => {
+    setDropTime(50);
+    drop();
+  }, [drop]);
+
+  const move = useCallback(
+    ({ keyCode, repeat }: { keyCode: number; repeat: boolean }): void => {
       if (keyCode === 37 && !repeat) {
         movePlayer(-1);
       } else if (keyCode === 39 && !repeat) {
@@ -34,21 +42,27 @@ export const Tetris = () => {
       } else if (keyCode === 40 && !repeat) {
         dropPlayer();
       }
-    };
+    },
+    [dropPlayer, movePlayer]
+  );
+
+  useEffect(() => {
     window.addEventListener('keydown', move);
     window.addEventListener('keyup', () => {
-      setDropTime(1000);
+      setDropTime(500);
     });
 
     return () => {
       window.removeEventListener('keydown', move);
       window.removeEventListener('keyup', () => {
-        setDropTime(1000);
+        setDropTime(500);
       });
     };
-  }, [player, updatePlayerPos]);
+  }, [move]);
 
-  console.log(setBoard, resetPlayer, dropTime, player);
+  useInterval(() => {
+    drop();
+  }, dropTime);
 
   return (
     <div className="Tetris">
